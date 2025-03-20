@@ -1,19 +1,11 @@
-# EarningsPrediction
-Apply business analytics skills to predict stock returns for publicly traded companies in the next 30 days.
+Here's an enhanced version of your script that includes moving averages (50-day & 200-day) along with the closing price. This will help in identifying trends and potential trading signals.
 
-Use web scripting technology(Python) to retrieve relevant information
-from available financial datasets, such as Yahoo Finance.
-Gather data for the relevant variables of Microsoft over the past 5 years from
-March 1, 2025. (e.g., https://uk.finance.yahoo.com/quote/MSFT/history/)
+Features Added:
+50-day Moving Average (Short-term Trend)
+200-day Moving Average (Long-term Trend)
+Improved Visualization
 
-To gather historical financial data for Microsoft (MSFT) over the past 5 years from Yahoo Finance using Python, we can use the yfinance library. Below is a Python script to retrieve relevant data:
-
-Steps:
-Install the required library: pip install yfinance
-Use yfinance to download historical stock prices.
-Save the data to a CSV file for further analysis.
-
-Python Script:
+Updated Python Code:
 
 import yfinance as yf
 import pandas as pd
@@ -30,14 +22,20 @@ msft_data = yf.download(ticker, start=start_date, end=end_date)
 # Save to CSV file
 msft_data.to_csv("MSFT_Historical_Data.csv")
 
-# Plot closing price
+# Calculate Moving Averages
+msft_data['50-Day MA'] = msft_data['Close'].rolling(window=50).mean()
+msft_data['200-Day MA'] = msft_data['Close'].rolling(window=200).mean()
+
+# Plot closing price with moving averages
 plt.figure(figsize=(12,6))
-plt.plot(msft_data.index, msft_data['Close'], label="MSFT Closing Price", color='blue')
+plt.plot(msft_data.index, msft_data['Close'], label="MSFT Closing Price", color='blue', linewidth=1.5)
+plt.plot(msft_data.index, msft_data['50-Day MA'], label="50-Day MA", color='red', linestyle="dashed")
+plt.plot(msft_data.index, msft_data['200-Day MA'], label="200-Day MA", color='green', linestyle="dashed")
 
 # Formatting the plot
-plt.title("Microsoft (MSFT) Stock Closing Price (Last 5 Years)", fontsize=14)
+plt.title("Microsoft (MSFT) Stock Price with Moving Averages (Last 5 Years)", fontsize=14)
 plt.xlabel("Date", fontsize=12)
-plt.ylabel("Closing Price (USD)", fontsize=12)
+plt.ylabel("Price (USD)", fontsize=12)
 plt.legend()
 plt.grid(True)
 
@@ -45,13 +43,7 @@ plt.grid(True)
 plt.show()
 
 
-Explanation:
-The script fetches daily stock prices (open, high, low, close, volume, adjusted close).
-The data covers the period from March 1, 2020, to March 1, 2025.
-The result is stored in a CSV file for further analysis.
-
-Output:
-This script will generate a line plot showing how Microsoft’s closing price has evolved over the last 5 years.
-The plot is saved and displayed for further analysis.
-The dataset is stored as "MSFT_Historical_Data.csv" for future reference.
-
+What This Does:
+Visualizes Microsoft’s stock price over the past 5 years.
+Adds 50-day & 200-day moving averages to identify short-term & long-term trends.
+Dashed lines help differentiate moving averages from the actual stock price.
